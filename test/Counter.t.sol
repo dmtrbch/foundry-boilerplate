@@ -12,13 +12,15 @@ contract CounterTest is Test {
         counter.setNumber(0);
     }
 
+    // Add helpful error message as a third argument in asserts
+
     function testIncrement() public {
         counter.increment();
-        assertEq(counter.number(), 1);
+        assertEq(counter.number(), 1, "expect x to equal to 1");
     }
 
     function testSetNumber(uint256 x) public {
         counter.setNumber(x);
-        assertEq(counter.number(), x);
+        assertEq(counter.number(), x, "x should be setNumber");
     }
 }
