@@ -244,14 +244,35 @@ contract DepositTest is Test {
     }
 
     /* =============================================
+     * Setting address balances with vm.deal and vm.hoax
+     * =============================================
+     */
+    //vm.hoax(addressToPrank, balanceToGive);
+    // next call is a prank for addressToPrank
+    // vm.deal(alice, balanceToGive);
+
+    /* =============================================
      * FUZZING
      * =============================================
      */
-    // notSeller will be chosen randomly
-    function testInvalidSellerAddress(address notSeller) public {
-        vm.assume(notSeller != SELLER);
+    function testFuzzBuyerDepositWrongPrice(uint256 price) public {
+        vm.assume(price != 1 ether);
+        vm.deal(buyer, price);
 
-        vm.expectRevert("not the seller");
-        deposit.sellerWithdraw(notSeller);
+        vm.expectRevert("incorrect amount");
+        deposit.buyerDeposit{value: price}();
+    }
+
+    function testFuzzDepositAmount(uint256 price) public startAtPresentDay {
+        // this test checks that the buyer can only deposit 1 ether
+        vm.assume(price != 1 ether);
+        vm.deal(buyer, price);
+
+        vm.startPrank(buyer);
+        vm.expectRevert();
+        deposit.buyerDeposit{value: price}();
+        vm.expectRevert();
+        deposit.buyerDeposit{value: price}();
+        vm.stopPrank();
     }
 }
