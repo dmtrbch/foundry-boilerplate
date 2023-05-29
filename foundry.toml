@@ -5,7 +5,7 @@ libs = ["lib"]
 
 [invariant]
 fail_on_revert = false
-runs = 1215
+runs = 20000
 depth = 23
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
